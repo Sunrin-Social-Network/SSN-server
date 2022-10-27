@@ -39,78 +39,78 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("AuthController Test")
 @Rollback
 class AuthControllerTest {
-    private MockMvc mvc;
+//     private MockMvc mvc;
 
-    @MockBean
-    private AuthService authService;
+//     @MockBean
+//     private AuthService authService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+//     @Autowired
+//     private ObjectMapper objectMapper;
 
-    @BeforeEach
-    public void setup() {
-        mvc =
-                MockMvcBuilders.standaloneSetup(new AuthController(authService))
-                        .addFilters(new CharacterEncodingFilter("UTF-8", true)) // utf-8 필터 추가
-                        .build();
-    }
+//     @BeforeEach
+//     public void setup() {
+//         mvc =
+//                 MockMvcBuilders.standaloneSetup(new AuthController(authService))
+//                         .addFilters(new CharacterEncodingFilter("UTF-8", true)) // utf-8 필터 추가
+//                         .build();
+//     }
 
-    @Test
-    @DisplayName("POST /auth/new - Clear")
-    void register() throws Exception {
-        String obj = objectMapper.writeValueAsString(new RegisterDTO("21sunrin100@sunrint.hs.kr","user1111","name1"));
-        ResultActions act = mvc.perform(
-                post("/auth/new")
-                        .content(obj)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-        act.andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("result").value(true));
-    }
+//     @Test
+//     @DisplayName("POST /auth/new - Clear")
+//     void register() throws Exception {
+//         String obj = objectMapper.writeValueAsString(new RegisterDTO("21sunrin100@sunrint.hs.kr","user1111","name1"));
+//         ResultActions act = mvc.perform(
+//                 post("/auth/new")
+//                         .content(obj)
+//                         .accept(MediaType.APPLICATION_JSON)
+//                         .contentType(MediaType.APPLICATION_JSON)
+//         );
+//         act.andDo(print())
+//                 .andExpect(status().isCreated())
+//                 .andExpect(jsonPath("result").value(true));
+//     }
 
-    @Test
-    @DisplayName("GET email exist")
-    void emailExists() throws Exception {
-        //String obj = objectMapper.writeValueAsString(new RegisterDTO("21sunrin100@sunrint.hs.kr","user1111","name1"));
-        ResultActions act = mvc.perform(
-                get("/auth/by-email/21sunrint000@sunrint.hs.kr/exists")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-        act.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("exist").value(false));
-    }
+//     @Test
+//     @DisplayName("GET email exist")
+//     void emailExists() throws Exception {
+//         //String obj = objectMapper.writeValueAsString(new RegisterDTO("21sunrin100@sunrint.hs.kr","user1111","name1"));
+//         ResultActions act = mvc.perform(
+//                 get("/auth/by-email/21sunrint000@sunrint.hs.kr/exists")
+//                         .accept(MediaType.APPLICATION_JSON)
+//                         .contentType(MediaType.APPLICATION_JSON)
+//         );
+//         act.andDo(print())
+//                 .andExpect(status().isOk())
+//                 .andExpect(jsonPath("exist").value(false));
+//     }
 
-    @Test
-    @DisplayName("GET username exist")
-    void usernameExists() throws Exception {
-        //String obj = objectMapper.writeValueAsString(new RegisterDTO("21sunrin100@sunrint.hs.kr","user1111","name1"));
-        ResultActions act = mvc.perform(
-                get("/auth/by-username/asdfasdfasfew/exists")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-        act.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("exist").value(false));
-    }
+//     @Test
+//     @DisplayName("GET username exist")
+//     void usernameExists() throws Exception {
+//         //String obj = objectMapper.writeValueAsString(new RegisterDTO("21sunrin100@sunrint.hs.kr","user1111","name1"));
+//         ResultActions act = mvc.perform(
+//                 get("/auth/by-username/asdfasdfasfew/exists")
+//                         .accept(MediaType.APPLICATION_JSON)
+//                         .contentType(MediaType.APPLICATION_JSON)
+//         );
+//         act.andDo(print())
+//                 .andExpect(status().isOk())
+//                 .andExpect(jsonPath("exist").value(false));
+//     }
 
-    @Test
-    @DisplayName("POST /auth/new - ValidationErr")
-    void registerValid() throws Exception {
-        String obj1 = objectMapper.writeValueAsString(new RegisterDTO("randomEmadfdil@sundfrint.hs.kr","user1d111","nam2dd2e1"));
-        ResultActions act1 = mvc.perform(
-                post("/auth/new")
-                        .content(obj1)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-        );
-        act1
-                .andExpect(status().isBadRequest()).andDo(print());
-    }
+//     @Test
+//     @DisplayName("POST /auth/new - ValidationErr")
+//     void registerValid() throws Exception {
+//         String obj1 = objectMapper.writeValueAsString(new RegisterDTO("randomEmadfdil@sundfrint.hs.kr","user1d111","nam2dd2e1"));
+//         ResultActions act1 = mvc.perform(
+//                 post("/auth/new")
+//                         .content(obj1)
+//                         .accept(MediaType.APPLICATION_JSON)
+//                         .contentType(MediaType.APPLICATION_JSON)
+//         );
+//         act1
+//                 .andExpect(status().isBadRequest()).andDo(print());
+//     }
 
 
 
