@@ -34,10 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(AuthController.class)
-@DisplayName("AuthController Test")
-@Rollback
+// @ExtendWith(SpringExtension.class)
+// @WebMvcTest(AuthController.class)
+// @DisplayName("AuthController Test")
+// @Rollback
 class AuthControllerTest {
 //     private MockMvc mvc;
 
