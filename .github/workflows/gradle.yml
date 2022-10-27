@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
     - name: Generate application.properties
+    - uses: actions/checkout@v3
       run: |
         echo "$APPLICATION_PROPERTIES_B64" > src/main/resources/application.properties.b64
         base64 -d -i src/main/resources/application.properties.b64 > src/main/resources/application.properties
