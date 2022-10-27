@@ -3,8 +3,6 @@ name: Spring Heroku Deploy
 on:
   push:
     branches: [ "release" ]
-  pull_request:
-    branches: [ "release" ]
 
 permissions:
   contents: read
@@ -47,6 +45,7 @@ jobs:
     - name: Deploy Heroku
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
+          branch: "release"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
