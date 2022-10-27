@@ -28,20 +28,17 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
-        
-        
     - name: Generate application.properties
       run: |
         echo "$APPLICATION_PROPERTIES_B64" > src/main/resources/application.properties.b64
         base64 -d -i src/main/resources/application.properties.b64 > src/main/resources/application.properties
       env:
         APPLICATION_PROPERTIES_B64: ${{ secrets.APPLICATION_PROPERTIES_B64 }}
-        
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew build
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      with:
+        arguments: build
+        
+        
+   
+        
