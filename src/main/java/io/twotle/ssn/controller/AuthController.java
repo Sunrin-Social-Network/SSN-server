@@ -1,17 +1,19 @@
 package io.twotle.ssn.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.twotle.ssn.component.CustomException;
-import io.twotle.ssn.dto.EmailDTO;
-import io.twotle.ssn.dto.ExistResponseDTO;
-import io.twotle.ssn.dto.RegisterDTO;
-import io.twotle.ssn.dto.ResultResponseDTO;
+import io.twotle.ssn.jwt.AccountDetails;
+import io.twotle.ssn.jwt.JwtProvider;
+import io.twotle.ssn.dto.*;
 import io.twotle.ssn.entity.User;
+import io.twotle.ssn.jwt.TokenResponseDTO;
 import io.twotle.ssn.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +23,29 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = {"1. Auth"})
 public class AuthController {
     private final AuthService authService;
+    private final JwtProvider jwtProvider;
 
     @ApiOperation(value = "Register", notes = "Create a new user.")
     @PostMapping("/new")
     public ResponseEntity<ResultResponseDTO> signUp(@RequestBody @Validated RegisterDTO registerDTO) throws CustomException {
         User newUser = this.authService.signUp(registerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResultResponseDTO(true));
+    }
+
+    @ApiOperation(value = "Login", notes = "Login with Email/PW")
+    @PostMapping("/local")
+    public ResponseEntity<TokenResponseDTO> signIn(@RequestBody @Validated LoginDTO loginDTO) throws CustomException, JsonProcessingException {
+        User user = this.authService.signIn(loginDTO);
+        TokenResponseDTO response = this.jwtProvider.createTokensByLogin(user);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @ApiOperation(value = "Refresh", notes = "Refresh AccessToken")
+    @GetMapping("/refresh")
+    public ResponseEntity<TokenResponseDTO> refresh(@AuthenticationPrincipal AccountDetails accountDetails) throws JsonProcessingException, CustomException {
+        User user = accountDetails.getUser();
+        TokenResponseDTO response = this.jwtProvider.refresh(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @ApiOperation(value="Email using check", notes = "Check your email is using."   )

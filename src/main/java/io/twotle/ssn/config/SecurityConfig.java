@@ -1,5 +1,8 @@
 package io.twotle.ssn.config;
 
+import io.twotle.ssn.jwt.AccountDetailsService;
+import io.twotle.ssn.jwt.JwtAuthenticationFilter;
+import io.twotle.ssn.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,20 +12,25 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtProvider jwtProvider;
+    private final AccountDetailsService accountDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     final String[] PERMIT_URL_ARRAY = {
@@ -49,13 +57,17 @@ public class SecurityConfig {
 
         return httpSecurity
                 .httpBasic().disable()
-                .csrf().disable()
-                .cors().and()
+                .csrf().and()
+                .cors().disable()
                 .headers().frameOptions().disable().and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .anyRequest().authenticated().and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, accountDetailsService),
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
