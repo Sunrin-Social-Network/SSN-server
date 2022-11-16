@@ -18,7 +18,7 @@ jobs:
       run: |
         mkdir -p ./src/main/resources
         echo "$APPLICATION_PROPERTIES_B64" >> ./src/main/resources/application.properties.b64
-        base64 -d -i ./src/main/resources/application.properties.b64 >> ./src/main/resources/application.properties
+        base64 -d -i ./src/main/resources/application.properties.b64 >> ./src/main/resources/application-heroku.properties
       env:
         APPLICATION_PROPERTIES_B64: "${{ secrets.APPLICATION_PROPERTIES_B64 }}"
     - name: Generate Procfile
