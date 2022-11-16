@@ -38,3 +38,4 @@ out/
 
 ### CICD ###
 src/main/resources/application.properties
+.env
