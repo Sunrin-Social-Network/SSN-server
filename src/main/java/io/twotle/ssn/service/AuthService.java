@@ -3,6 +3,7 @@ package io.twotle.ssn.service;
 import io.twotle.ssn.component.CustomException;
 import io.twotle.ssn.component.ExceptionCode;
 import io.twotle.ssn.dto.EmailDTO;
+import io.twotle.ssn.dto.LoginDTO;
 import io.twotle.ssn.dto.RegisterDTO;
 import io.twotle.ssn.entity.User;
 import io.twotle.ssn.repository.UserRepository;
@@ -20,15 +21,22 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AuthService {
     private UserRepository userRepository;
-    private PasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     public User signUp(RegisterDTO registerDTO) throws CustomException{
         if(this.isEmailAvailable(registerDTO.getEmail()) && this.isUsernameAvailable(registerDTO.getUsername())) {
             throw new CustomException(ExceptionCode.ALREADY_REGISTERED);
         }
         User newUser = registerDTO.toUserEntity();
-        newUser.hashPassword(bCryptPasswordEncoder);
+        newUser.hashPassword(passwordEncoder);
         return this.userRepository.save(newUser);
+    }
+
+    public User signIn(LoginDTO loginDTO) throws CustomException {
+        loginDTO.hashPassword(passwordEncoder);
+        Optional<User> user = this.userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
+        if(user.isEmpty()) throw new CustomException(ExceptionCode.USER_NOT_FOUND_ERROR);
+        return user.get();
     }
 
     public boolean isEmailAvailable(String email) {

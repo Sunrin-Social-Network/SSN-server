@@ -1,7 +1,9 @@
 package io.twotle.ssn.dto;
 
+import io.twotle.ssn.entity.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -14,4 +16,8 @@ public class LoginDTO {
     private String email;
     @NotEmpty(message = "password must not be null")
     private String password;
+
+    public void hashPassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
 }
