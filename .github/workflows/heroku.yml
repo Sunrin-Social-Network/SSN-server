@@ -17,22 +17,22 @@ jobs:
     - name: Generate application.properties
       run: |
         mkdir -p ./src/main/resources
-        echo "$APPLICATION_PROPERTIES_B64" >> ./src/main/resources/application.properties.b64
-        base64 -d -i ./src/main/resources/application.properties.b64 >> ./src/main/resources/application-heroku.properties
+        echo "$APPLICATION_PROPERTIES_B64" > ./src/main/resources/application.properties.b64
+        base64 -d -i ./src/main/resources/application.properties.b64 > ./src/main/resources/application.properties
       env:
         APPLICATION_PROPERTIES_B64: "${{ secrets.APPLICATION_PROPERTIES_B64 }}"
     - name: Generate Procfile
-      env:
-        HEROKU_PROCFILE_B64: "${{ secrets.HEROKU_PROCFILE_B64 }}"
       run: |
         echo "$HEROKU_PROCFILE_B64" > Procfile.b64
         base64 -d -i Procfile.b64 > Procfile
-    - name: Generate system.properties
       env:
-        SYSTEM_PROPERTIES_B64: "${{ secrets.SYSTEM_PROPERTIES_B64 }}"
+        HEROKU_PROCFILE_B64: "${{ secrets.HEROKU_PROCFILE_B64 }}"
+    - name: Generate system.properties
       run: |
         echo "$SYSTEM_PROPERTIES_B64" > system.properties.b64
         base64 -d -i system.properties.b64 > system.properties
+      env:
+        SYSTEM_PROPERTIES_B64: "${{ secrets.SYSTEM_PROPERTIES_B64 }}"
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
