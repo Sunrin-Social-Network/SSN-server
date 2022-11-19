@@ -19,6 +19,9 @@ jobs:
         mkdir -p ./src/main/resources
         echo "$APPLICATION_PROPERTIES" > ./src/main/resources/application.properties
         tail ./src/main/resources/application.properties
+        cd ./src/main/resources
+        ls -lrta
+        cd ../../../
       env:
         APPLICATION_PROPERTIES: "${{ secrets.APPLICATION_PROPERTIES }}"
     - name: Generate Procfile
