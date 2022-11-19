@@ -45,6 +45,10 @@ jobs:
         arguments: build
     - name: Heroku Deploy
       run: |
+        git init
+        git branch -m master
+        git add .
+        git commit -m "DEPLOY"
         git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master
 
 
