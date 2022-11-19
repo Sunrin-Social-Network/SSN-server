@@ -17,9 +17,7 @@ jobs:
     - name: Generate application.properties
       run: |
         cd src/main/resources
-        echo "$APPLICATION_PROPERTIES_B64" > application-b64.properties
-        base64 -d -i application-b64.properties > application.properties
-        cp application.properties application-prod.properties
+        echo "$APPLICATION_PROPERTIES" > application-prod.properties
         cd ../../../
       env:
         APPLICATION_PROPERTIES: "${{ secrets.APPLICATION_PROPERTIES }}"
