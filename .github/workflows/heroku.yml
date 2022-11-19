@@ -19,7 +19,7 @@ jobs:
         mkdir -p ./src/main/resources
         echo "$APPLICATION_PROPERTIES" > ./src/main/resources/application.properties
       env:
-        APPLICATION_PROPERTIES_B64: "${{ secrets.APPLICATION_PROPERTIES_B64 }}"
+        APPLICATION_PROPERTIES: "${{ secrets.APPLICATION_PROPERTIES }}"
     - name: Generate Procfile
       run: |
         echo "$HEROKU_PROCFILE_B64" > Procfile.b64
