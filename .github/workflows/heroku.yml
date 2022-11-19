@@ -45,11 +45,16 @@ jobs:
         arguments: build
     - name: Heroku Deploy
       run: |
+        git config --global user.email "$HEROKU_EMAIL"
+        git config --global user.name "$HEROKU_APP_NAME"
         git init
         git branch -m master
         git add .
         git commit -m "DEPLOY"
         git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master
+      env:
+        HEROKU_APP_NAME: "${{ secrets.HEROKU_APP_NAME }}"
+        HEROKU_EMAIL: "${{ secrets.HEROKU_EMAIL }}"
 
 
 
