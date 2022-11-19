@@ -22,23 +22,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Generate application.properties
-      env:
-        APPLICATION_PROPERTIES_B64: "${{ secrets.APPLICATION_PROPERTIES_B64 }}"
-      run: |
-        mkdir -p src/main/resources
-        echo "$APPLICATION_PROPERTIES_B64" > src/main/resources/application.properties.b64
-        base64 -d -i src/main/resources/application.properties.b64 > src/main/resources/application.properties
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
+      - uses: actions/checkout@v3
+      - name: Generate application.properties
+        run: |
+          mkdir -p ./src/main/resources
+          echo "$APPLICATION_PROPERTIES" > ./src/main/resources/application.properties
+          tail ./src/main/resources/application.properties
+          cd ./src/main/resources
+          ls -lrta
+          cd ../../../
+        env:
+          APPLICATION_PROPERTIES: "${{ secrets.APPLICATION_PROPERTIES }}"
+      - name: Generate Procfile
+        run: |
+          echo "$HEROKU_PROCFILE_B64" > Procfile.b64
+          base64 -d -i Procfile.b64 > Procfile
+        env:
+          HEROKU_PROCFILE_B64: "${{ secrets.HEROKU_PROCFILE_B64 }}"
+      - name: Generate system.properties
+        run: |
+          echo "$SYSTEM_PROPERTIES_B64" > system.properties.b64
+          base64 -d -i system.properties.b64 > system.properties
+          ls -lrta
+        env:
+          SYSTEM_PROPERTIES_B64: "${{ secrets.SYSTEM_PROPERTIES_B64 }}"
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: build
         
         
    
