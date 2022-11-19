@@ -61,9 +61,14 @@ jobs:
         HEROKU_APP_NAME: "${{ secrets.HEROKU_APP_NAME }}"
     - name: Push to Heroku
       run: |
+        git config --global user.email "$HEROKU_EMAIL"
+        git config --global user.name "$HEROKU_APP_NAME"
         git add .
         git commit -am "DEPLOY"
         git push heroku master
+      env:
+        HEROKU_APP_NAME: "${{ secrets.HEROKU_APP_NAME }}"
+        HEROKU_EMAIL: "${{ secrets.HEROKU_EMAIL }}"
         
         
    
