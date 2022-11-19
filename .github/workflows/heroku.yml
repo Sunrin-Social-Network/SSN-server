@@ -17,8 +17,7 @@ jobs:
     - name: Generate application.properties
       run: |
         mkdir -p ./src/main/resources
-        echo "$APPLICATION_PROPERTIES_B64" > ./src/main/resources/application.properties.b64
-        base64 -d -i ./src/main/resources/application.properties.b64 > ./src/main/resources/application.properties
+        echo "$APPLICATION_PROPERTIES" > ./src/main/resources/application.properties
       env:
         APPLICATION_PROPERTIES_B64: "${{ secrets.APPLICATION_PROPERTIES_B64 }}"
     - name: Generate Procfile
@@ -43,19 +42,12 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-    - name: Heroku Deploy
-      run: |
-        git config --global user.email "$HEROKU_EMAIL"
-        git config --global user.name "$HEROKU_APP_NAME"
-        git init
-        git branch -m master
-        git add .
-        git commit -m "DEPLOY"
-        git push -f https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git origin/master:master
-      env:
-        HEROKU_APP_NAME: "${{ secrets.HEROKU_APP_NAME }}"
-        HEROKU_EMAIL: "${{ secrets.HEROKU_EMAIL }}"
-
+    - name: Deploy To Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
 
 
         
