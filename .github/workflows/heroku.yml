@@ -42,33 +42,17 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-    - name: Heroku login credentials
-      run: |
-        cat > ~/.netrc <<EOF
-          machine api.heroku.com
-            login $HEROKU_EMAIL
-            password $HEROKU_API_KEY
-          machine git.heroku.com
-            login $HEROKU_EMAIL
-            password $HEROKU_API_KEY
-        EOF
-      env:
-          HEROKU_API_KEY: "${{ secrets.HEROKU_API_KEY }}"
-          HEROKU_EMAIL: "${{ secrets.HEROKU_EMAIL }}"
-    - name: Add Heroku remote
-      run: heroku git:remote --app $HEROKU_APP_NAME
-      env:
-        HEROKU_APP_NAME: "${{ secrets.HEROKU_APP_NAME }}"
-    - name: Push to Heroku
-      run: |
-        git config --global user.email "$HEROKU_EMAIL"
-        git config --global user.name "$HEROKU_APP_NAME"
-        git add .
-        git commit -am "DEPLOY"
-        git push heroku master
-      env:
-        HEROKU_APP_NAME: "${{ secrets.HEROKU_APP_NAME }}"
-        HEROKU_EMAIL: "${{ secrets.HEROKU_EMAIL }}"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+        heroku_app_name: ${{secrets.HEROKU_APP_NAME}
+        heroku_email: ${{secrets.HEROKU_EMAIL}}
+
         
         
    
