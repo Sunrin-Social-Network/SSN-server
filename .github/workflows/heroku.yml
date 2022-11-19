@@ -16,14 +16,13 @@ jobs:
     - uses: actions/checkout@v3
     - name: Generate application.properties
       run: |
-        mkdir -p ./src/main/resources
-        echo "$APPLICATION_PROPERTIES" > ./src/main/resources/application.properties
-        tail ./src/main/resources/application.properties
-        cd ./src/main/resources
-        ls -lrta
+        cd src/main/resources
+        echo "$APPLICATION_PROPERTIES_B64" > application-b64.properties
+        base64 -d -i application-b64.properties > application.properties
         cd ../../../
       env:
         APPLICATION_PROPERTIES: "${{ secrets.APPLICATION_PROPERTIES }}"
+        APPLICATION_PROPERTIES_B64: "${{ secrets.APPLICATION_PROPERTIES_B64 }}"
     - name: Generate Procfile
       run: |
         echo "$HEROKU_PROCFILE_B64" > Procfile.b64
