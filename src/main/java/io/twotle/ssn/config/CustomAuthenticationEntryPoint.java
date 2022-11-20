@@ -33,10 +33,10 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         //Message message = new Message(exceptionMessage, HttpStatus.UNAUTHORIZED);
-//        ErrorResponseDTO dto = new ErrorResponseDTO(0, exceptionMessage);
-//        String res = this.convertObjectToJson(dto);
-//        response.getWriter().print(res);
-        throw new CustomException(ExceptionCode.DEFAULT_ERROR);
+        ErrorResponseDTO dto = new ErrorResponseDTO(0, exceptionMessage);
+        String res = this.convertObjectToJson(dto);
+        response.getWriter().print(res);
+        //throw new CustomException(ExceptionCode.DEFAULT_ERROR);
     }
 
     private String convertObjectToJson(Object object) throws JsonProcessingException {
