@@ -33,7 +33,7 @@ public class RedisConfig {
         redisStandaloneConfiguration.setUsername(username);
         redisStandaloneConfiguration.setPort(port);
         redisStandaloneConfiguration.setPassword(password);
-        return new LettuceConnectionFactory(host, port);
+        return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
     @Bean
