@@ -34,8 +34,8 @@ public class AuthService {
 
     public User signIn(LoginDTO loginDTO) throws CustomException {
         loginDTO.hashPassword(passwordEncoder);
-        Optional<User> user = this.userRepository.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
-        if(user.isEmpty()) throw new CustomException(ExceptionCode.USER_NOT_FOUND_ERROR);
+        Optional<User> user = this.userRepository.findByEmail(loginDTO.getEmail());
+        if(user.isEmpty() || !user.get().checkPassword(loginDTO.getPassword(), passwordEncoder)) throw new CustomException(ExceptionCode.USER_NOT_FOUND_ERROR);
         return user.get();
     }
 
