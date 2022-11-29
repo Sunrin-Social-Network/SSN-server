@@ -62,6 +62,12 @@ public class BoardService {
                 .stream().map(JPostDTO::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    public JPostDTO getPost(Long id) {
+        return new JPostDTO(this.postRepository.findById(id).get());
+
+    }
+
     public User getUserByEmail(String email) {
         return this.userRepository.findByEmail(email).get();
     }

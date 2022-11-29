@@ -87,9 +87,18 @@ public class BoardController {
     @Transactional
     public ResponseEntity<PostsDTO> getPosts() {
         List<JPostDTO> data = this.boardService.getPosts();
-        System.out.println(data.get(0).getComment());
         PostsDTO ret = new PostsDTO(data);
         return ResponseEntity.status(HttpStatus.OK).body(ret);
+    }
+
+    @ApiOperation(value = "Get One Post")
+    @GetMapping("/{boardId}")
+    @Transactional
+    public ResponseEntity<JPostDTO> getPost(
+            @PathVariable("boardId") Long id
+    ) {
+        JPostDTO data = this.boardService.getPost(id);
+        return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
 
