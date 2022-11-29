@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class AuthController {
 
     @ApiOperation(value = "Refresh", notes = "Refresh AccessToken")
     @GetMapping("/refresh")
-    public ResponseEntity<TokenResponseDTO> refresh(@AuthenticationPrincipal AccountDetails accountDetails) throws JsonProcessingException, CustomException {
+    public ResponseEntity<TokenResponseDTO> refresh(@AuthenticationPrincipal @ApiIgnore AccountDetails accountDetails) throws JsonProcessingException, CustomException {
         User user = accountDetails.getUser();
         TokenResponseDTO response = this.jwtProvider.refresh(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -59,6 +60,12 @@ public class AuthController {
     public ResponseEntity<ExistResponseDTO> isExistUsername(@PathVariable(name = "username") String username) throws CustomException {
         return ResponseEntity.status(HttpStatus.OK).body(new ExistResponseDTO(this.authService.isUsernameAvailable(username)));
     }
+
+//    @ApiOperation(value = "Get My User Data", notes = "Get My User Data")
+//    @GetMapping("/user")
+//    public ResponseEntity<UserDataDTO> getUserData(@AuthenticationPrincipal @ApiIgnore AccountDetails accountDetails) throws CustomException {
+//
+//    }
 
 
 

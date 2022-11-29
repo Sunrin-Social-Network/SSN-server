@@ -38,4 +38,5 @@ out/
 
 ### CICD ###
 src/main/resources/application.properties
+src/main/resources/firebaseService.json
 .env
