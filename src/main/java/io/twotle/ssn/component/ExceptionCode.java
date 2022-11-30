@@ -10,7 +10,8 @@ public enum ExceptionCode {
     DEFAULT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 0, "Something Error"),
     USER_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, 2, "User not found"),
 
-    NO_FILE_ERROR(HttpStatus.BAD_REQUEST,3,"No File found");
+    NO_FILE_ERROR(HttpStatus.BAD_REQUEST,3,"No File found"),
+    NO_MEAL_DATA(HttpStatus.INTERNAL_SERVER_ERROR, 4, "NO Meal Data");
 
     private final HttpStatus status;
     private final int code;
