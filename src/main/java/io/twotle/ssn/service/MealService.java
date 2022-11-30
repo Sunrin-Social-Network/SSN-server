@@ -1,6 +1,7 @@
 package io.twotle.ssn.service;
 
 import io.twotle.ssn.component.CustomException;
+import io.twotle.ssn.component.ExceptionCode;
 import io.twotle.ssn.component.RedisDao;
 import io.twotle.ssn.dto.MealDTO;
 import io.twotle.ssn.dto.meal.MealServiceDietInfo;
@@ -29,10 +30,8 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -57,9 +56,11 @@ public class MealService {
 
     public MealDTO getTodayMealData() throws CustomException {
         Date from = new Date();
+        TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+
 
         SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMdd");
-
+        transFormat.setTimeZone(tz);
         String to = transFormat.format(from);
         String todayMeal = redisDao.getValues(to);
         if(todayMeal == null || todayMeal.equals("")) {
@@ -67,8 +68,12 @@ public class MealService {
             //Root foodData = getData(getFoodReqUrl(to));
 
             String foodData = getData(getFoodReqUrl(to));
-            redisDao.setValues(to,foodData, Duration.ofDays(1));
-            todayMeal = foodData;
+            if(foodData == null) throw new CustomException(ExceptionCode.NO_MEAL_DATA);
+            else {
+                redisDao.setValues(to,foodData, Duration.ofDays(1));
+                todayMeal = foodData;
+            }
+
         }
         return new MealDTO(to, todayMeal);
     }
