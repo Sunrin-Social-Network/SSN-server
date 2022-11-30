@@ -91,6 +91,17 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(ret);
     }
 
+    @ApiOperation(value = "Get Posts By One Tag")
+    @GetMapping("/tag/{tag}")
+    @Transactional
+    public ResponseEntity<PostsDTO> getPostsByTags(
+        @PathVariable("tag") String tag
+    ) {
+        List<JPostDTO> data = this.boardService.getPostsByTag(tag);
+        PostsDTO ret = new PostsDTO(data);
+        return ResponseEntity.status(HttpStatus.OK).body(ret);
+    }
+
     @ApiOperation(value = "Get One Post")
     @GetMapping("/{boardId}")
     @Transactional

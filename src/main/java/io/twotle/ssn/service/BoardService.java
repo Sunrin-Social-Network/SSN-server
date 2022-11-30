@@ -63,6 +63,12 @@ public class BoardService {
     }
 
     @Transactional
+    public List<JPostDTO> getPostsByTag(String tag) {
+        return this.postRepository.findByTagsContaining(tag)
+                .stream().map(JPostDTO::new).collect(Collectors.toList());
+    }
+
+    @Transactional
     public JPostDTO getPost(Long id) {
         return new JPostDTO(this.postRepository.findById(id).get());
 
