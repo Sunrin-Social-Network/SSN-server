@@ -49,7 +49,10 @@ public class AuthService {
         return !byUsername.isEmpty();
     }
 
-
+    public User getUserByEmail(String email) {
+        Optional<User> byEmail = this.userRepository.findByEmail(email);
+        return (!byEmail.isEmpty()) ? byEmail.get() : null;
+    }
 
 
 
