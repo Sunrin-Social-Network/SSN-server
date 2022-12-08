@@ -67,6 +67,14 @@ public class AuthController {
 //
 //    }
 
+    @ApiOperation(value = "Get User Data", notes = "Get user data by email")
+    @GetMapping("/profile")
+    public ResponseEntity<UserDataDTO> getUserByToken(@AuthenticationPrincipal @ApiIgnore AccountDetails accountDetails) throws CustomException {
+        User user = this.authService.getUserByEmail(accountDetails.getUser().getEmail());
+        UserDataDTO response = new UserDataDTO();
+        response.fromUser(user);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
 
 
